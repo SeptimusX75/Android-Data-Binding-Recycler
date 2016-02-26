@@ -1,7 +1,8 @@
-package meta.simplifi.core.viewmodel;
+package meta.simplifi.core.adapter;
 
 import android.databinding.DataBindingUtil;
 import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.databinding.ViewDataBinding;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
@@ -15,6 +16,7 @@ import java.util.Collection;
 
 import meta.simplifi.core.BR;
 import meta.simplifi.core.R;
+import meta.simplifi.core.viewmodel.BaseViewModel;
 
 /**
  * Created by SeptimusX75 (msilva28.dev@gmail.com) on 2/25/2016.
@@ -37,23 +39,20 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
         mViewModels = viewModels;
     }
 
-    public T getItem(int position) {
+    public final T getItem(int position) {
         return mViewModels.get(position);
     }
 
-    public int getItemPosition(T viewModel) {
+    public final int getItemPosition(T viewModel) {
         return mViewModels.indexOf(viewModel);
     }
 
-    /**
-     * Returns the data used by this adapter.
-     * If registering a listener on changes to the array is required
-     * it can be done here.
-     *
-     * @return The list of items in the array.
-     */
-    public final ObservableArrayList<T> getItems() {
-        return mViewModels;
+    public final void addOnListChangedCallback(ObservableList.OnListChangedCallback callback) {
+        mViewModels.addOnListChangedCallback(callback);
+    }
+
+    public final void removeOnListChangedCallback(ObservableList.OnListChangedCallback callback) {
+        mViewModels.removeOnListChangedCallback(callback);
     }
 
     /**
@@ -61,7 +60,7 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
      *
      * @param item The item to add at the end of the array.
      */
-    public void add(T item) {
+    public final void add(T item) {
         synchronized (mLock) {
             mViewModels.add(item);
             notifyItemInserted(mViewModels.size() - 1);
@@ -73,7 +72,7 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
      *
      * @param items The Collection to add at the end of the array.
      */
-    public void addAll(Collection<T> items) {
+    public final void addAll(Collection<T> items) {
         synchronized (mLock) {
             mViewModels.addAll(items);
             notifyItemRangeChanged(mViewModels.size() - items.size(), items.size());
@@ -85,7 +84,7 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
      *
      * @param item The item to add at the end of the array.
      */
-    public void add(int position, T item) {
+    public final void add(int position, T item) {
         synchronized (mLock) {
             mViewModels.add(position, item);
             notifyItemInserted(position);
@@ -97,7 +96,7 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
      *
      * @param item The item to remove.
      */
-    public void remove(T item) {
+    public final void remove(T item) {
         synchronized (mLock) {
             final int position = getItemPosition(item);
             mViewModels.remove(item);
@@ -110,7 +109,7 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
      *
      * @param position
      */
-    public void remove(int position) {
+    public final void remove(int position) {
         synchronized (mLock) {
             mViewModels.remove(position);
             notifyItemRemoved(position);
@@ -120,7 +119,7 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
     /**
      * Removes all items in the array.
      */
-    public void clear() {
+    public final void clear() {
         synchronized (mLock) {
             mViewModels.clear();
             notifyDataSetChanged();
@@ -133,7 +132,7 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
     }
 
     @Override
-    public int getItemCount() {
+    public final int getItemCount() {
         return mViewModels.size();
     }
 
@@ -155,11 +154,11 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
         return LayoutInflater.from(parent.getContext()).inflate(layoutRes, parent, false);
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public final void setOnItemClickListener(OnItemClickListener listener) {
         mItemClickListener = listener;
     }
 
-    public boolean hasOnItemClickListener() {
+    public final boolean hasOnItemClickListener() {
         return mItemClickListener != null;
     }
 
@@ -172,6 +171,14 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
         }
     }
 
+    protected final ObservableArrayList<T> getViewModels() {
+        return mViewModels;
+    }
+
+    protected final OnItemClickListener getItemClickListener() {
+        return mItemClickListener;
+    }
+
     @Override
     public void onClick(View v) {
         Object tag = v.getTag(R.id.tag_key_view_holder);
@@ -182,7 +189,7 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
 
         int position = ((BindingViewHolder) tag).getAdapterPosition();
         if (position != RecyclerView.NO_POSITION) {
-
+            mItemClickListener.onItemClick(v, position);
         }
     }
 
