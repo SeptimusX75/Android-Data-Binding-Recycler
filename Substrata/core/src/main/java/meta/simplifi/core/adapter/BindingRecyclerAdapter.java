@@ -21,7 +21,7 @@ import meta.simplifi.core.viewmodel.BaseViewModel;
 /**
  * This {@link RecyclerView.Adapter} works out of the box by requiring only that the items placed
  * inside extend {@link BaseViewModel} and that for each view-model, a corresponding
- * {@link ViewDataBinding} with a viewModel variable defined. If these conditions are met the adapter
+ * {@link ViewDataBinding} with a viewModel variable be defined. If these conditions are met the adapter
  * will work automatically with any number of view types.
  * This class will create an array for you if none is provided and modifying the it can be done
  * through the provided interfaces. This will also automate the adapter notification process when
@@ -49,10 +49,19 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
     protected ObservableArrayList<T> mItems;
     protected OnItemClickListener mItemClickListener;
 
+    /**
+     * Creates an instance of this adapter and initializes the array.
+     */
     public BindingRecyclerAdapter() {
         mItems = new ObservableArrayList<>();
     }
 
+    /**
+     * Creates an instance of this adapter and creates and uses the passed-in list of items
+     * as the array.
+     *
+     * @param items The items to bind to the adapter.
+     */
     public BindingRecyclerAdapter(ObservableArrayList<T> items) {
         mItems = items;
     }
@@ -74,10 +83,20 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
         return mItems.indexOf(item);
     }
 
+    /**
+     * Allows for listening to changes on the array.
+     *
+     * @param callback The callback to be executed on list changes.
+     */
     public final void addOnListChangedCallback(ObservableList.OnListChangedCallback callback) {
         mItems.addOnListChangedCallback(callback);
     }
 
+    /**
+     * Removes the specified callback from the array.
+     *
+     * @param callback The callback to remove.
+     */
     public final void removeOnListChangedCallback(ObservableList.OnListChangedCallback callback) {
         mItems.removeOnListChangedCallback(callback);
     }
@@ -171,8 +190,14 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
     }
 
     /**
-     * @param holder
-     * @param position
+     * Binds the view-model to the view-holder. Searches for a setViewModel method
+     * in the holder's binding. If none is present, the data will not be bound to the holder.
+     * If your holder has numerous variables, you should override this method for your specific
+     * variables and subsequently call super. Additional click listener registration, such as for
+     * nested controls should be done here.
+     *
+     * @param holder   The view holder containing the {@link ViewDataBinding}
+     * @param position The position of the item in the array.
      */
     @Override
     public void onBindViewHolder(BindingViewHolder holder, int position) {
@@ -183,9 +208,13 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
     }
 
     /**
-     * @param parent
-     * @param viewType
-     * @return
+     * Inflates the view specified by the {@link BaseViewModel}'s layout id and creates a
+     * {@link BindingViewHolder}.
+     *
+     * @param parent   The parent view group to attach the inflated view to.
+     * @param viewType The layout id of the view to be inflated and placed in
+     *                 the{@link BindingViewHolder}
+     * @return The view-holder containing the inflated view.
      */
     @Override
     public BindingViewHolder onCreateViewHolder(ViewGroup parent, @LayoutRes int viewType) {
@@ -194,31 +223,44 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
     }
 
     /**
-     * @param parent
-     * @param layoutRes
-     * @return
+     * A convenience method for inflating views.
+     *
+     * @param parent    The parent view group to attach the inflated view to.
+     * @param layoutRes The layout id of the view to be inflated
+     * @return The inflated view.
      */
     protected View inflateView(ViewGroup parent, @LayoutRes int layoutRes) {
         return LayoutInflater.from(parent.getContext()).inflate(layoutRes, parent, false);
     }
 
     /**
-     * @param listener
+     * Sets the item click listener on this adapter. Only one may be registered per adapter.
+     * Callbacks will be sent to the listener when items inside of the recycler/adapter are clicked.
+     * If the item in the adapter has nested controls, registering here will not be sufficient.
+     * onBindViewHolder should be overridden and setAdapterAsClickListener should be called for all
+     * nested controls.
+     *
+     * @param listener The listener to be called when an entry in the recycler is clicked.
      */
     public final void setOnItemClickListener(OnItemClickListener listener) {
         mItemClickListener = listener;
     }
 
     /**
-     * @return
+     * Checks for the presence of an itemClickListener.
+     *
+     * @return {@code false} if there is no {@link OnItemClickListener} registered.
      */
     public final boolean hasOnItemClickListener() {
         return mItemClickListener != null;
     }
 
     /**
-     * @param holder
-     * @param views
+     * Convenience method setting this instance of the adapter as the click listener for any view
+     * that is passed in.
+     *
+     * @param holder The view-holder containing the views.
+     * @param views  The views to register listeners on.
      */
     protected final void setAdapterAsClickListener(@NonNull BindingViewHolder holder, @NonNull View... views) {
         for (View view : views) {
@@ -230,21 +272,16 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
     }
 
     /**
-     * @return
+     * Convenience method returning the items contained in this adapter.
+     *
+     * @return The array contained within this adapter.
      */
     protected final ObservableArrayList<T> getItems() {
         return mItems;
     }
 
     /**
-     * @return
-     */
-    protected final OnItemClickListener getItemClickListener() {
-        return mItemClickListener;
-    }
-
-    /**
-     * @param v
+     * @param v The clicked view.
      */
     @Override
     public void onClick(View v) {
@@ -261,14 +298,17 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
     }
 
     /**
-     *
+     * Interface definition for a callback to be invoked when a view in the {@link RecyclerView}
+     * is clicked.
      */
     public interface OnItemClickListener {
         void onItemClick(View v, int position);
     }
 
     /**
-     * @param <T>
+     * Uses {@link ViewDataBinding} to create a view-holder
+     *
+     * @param <T> The binding type contained within.
      */
     public static class BindingViewHolder<T extends ViewDataBinding>
             extends RecyclerView.ViewHolder {
@@ -276,7 +316,10 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
         public final T binding;
 
         /**
-         * @param itemView
+         * Creates an instance of this view-holder that binds the passed in view
+         * to the respective binding.
+         *
+         * @param itemView The view to bind.
          */
         public BindingViewHolder(View itemView) {
             super(itemView);
