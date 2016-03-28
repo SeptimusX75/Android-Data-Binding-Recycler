@@ -14,7 +14,6 @@ import android.view.ViewGroup;
 
 import java.util.Collection;
 
-import meta.simplifi.core.BR;
 import meta.simplifi.core.R;
 import meta.simplifi.core.viewmodel.BaseViewModel;
 
@@ -147,6 +146,7 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
             final int position = getItemPosition(item);
             mItems.remove(item);
             notifyItemRemoved(position);
+            notifyItemRangeChanged(position + 1, getItemCount() - position);
         }
     }
 
@@ -159,6 +159,7 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
         synchronized (mLock) {
             mItems.remove(position);
             notifyItemRemoved(position);
+            notifyItemRangeChanged(position + 1, getItemCount() - position);
         }
     }
 
@@ -203,7 +204,7 @@ public class BindingRecyclerAdapter<T extends BaseViewModel>
     public void onBindViewHolder(BindingViewHolder holder, int position) {
         setAdapterAsClickListener(holder, holder.itemView);
         BaseViewModel viewModel = mItems.get(position);
-        holder.binding.setVariable(BR.viewModel, viewModel);
+        holder.binding.setVariable(viewModel.getVariableId(), viewModel);
         holder.binding.executePendingBindings();
     }
 

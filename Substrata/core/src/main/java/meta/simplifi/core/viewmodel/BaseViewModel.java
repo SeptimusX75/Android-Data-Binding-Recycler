@@ -1,6 +1,7 @@
 package meta.simplifi.core.viewmodel;
 
 import android.databinding.BaseObservable;
+import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 
 /**
@@ -19,4 +20,7 @@ public abstract class BaseViewModel extends BaseObservable {
      */
     @LayoutRes
     public abstract int getLayoutId();
+
+    @IdRes
+    public abstract int getVariableId();
 }

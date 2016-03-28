@@ -37,4 +37,9 @@ public class PracticeViewModel extends BaseViewModel {
     public int getLayoutId() {
         return R.layout.list_item_practice;
     }
+
+    @Override
+    public int getVariableId() {
+        return BR.viewModel;
+    }
 }
