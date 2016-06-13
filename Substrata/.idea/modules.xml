@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Substrata.iml" filepath="$PROJECT_DIR$/Substrata.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/core/core.iml" filepath="$PROJECT_DIR$/core/core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/binding/recycler.iml" filepath="$PROJECT_DIR$/binding/recycler.iml" />
     </modules>
   </component>
 </project>
