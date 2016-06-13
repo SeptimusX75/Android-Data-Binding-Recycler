@@ -1,0 +1,58 @@
+apply plugin: 'com.android.library'
+apply from:'maven-push.gradle'
+
+ext {
+    bintrayRepo = 'maven'
+    bintrayName = 'android-core-binding'
+
+    publishedGroupId = 'meta.simplifi.core'
+    libraryName = 'android-core-binding'
+    artifact = 'binding'
+
+    libraryDescription = 'Simplifies some common data binding tasks.'
+
+    siteUrl = 'https://github.com/SeptimusX75/Android-Data-Binding-Recycler'
+    gitUrl = 'https://github.com/SeptimusX75/Android-Data-Binding-Recycler.git'
+
+    libraryVersion = '0.0.1'
+
+    developerId = 'septimusx75'
+    developerName = 'Manuel Silva'
+    developerEmail = 'msilva28.dev@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.3"
+
+    dataBinding {
+        enabled = true
+    }
+
+    defaultConfig {
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:recyclerview-v7:23.4.0'
+}
+
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
+apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
