@@ -1,8 +1,6 @@
 package meta.simplifi.core.viewmodel;
 
-import android.databinding.BaseObservable;
 import android.support.annotation.AnyRes;
-import android.support.annotation.IdRes;
 import android.support.annotation.LayoutRes;
 
 /**

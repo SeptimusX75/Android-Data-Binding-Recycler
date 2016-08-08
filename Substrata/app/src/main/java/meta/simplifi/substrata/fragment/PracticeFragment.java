@@ -47,8 +47,9 @@ public class PracticeFragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRecyclerView = ((RecyclerView) inflater.inflate(R.layout.layout_recycler_view, container));
-        return mRecyclerView;
+        View view = inflater.inflate(R.layout.layout_recycler_view, container);
+        mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
+        return view;
     }
 
     @Override
