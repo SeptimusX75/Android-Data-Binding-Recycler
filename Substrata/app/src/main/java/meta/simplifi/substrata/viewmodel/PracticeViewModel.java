@@ -2,7 +2,7 @@ package meta.simplifi.substrata.viewmodel;
 
 import android.databinding.Bindable;
 
-import meta.simplifi.core.viewmodel.BaseViewModel;
+import meta.simplifi.core.viewmodel.BindingViewModel;
 import meta.simplifi.substrata.BR;
 import meta.simplifi.substrata.R;
 import meta.simplifi.substrata.model.User;
@@ -10,7 +10,7 @@ import meta.simplifi.substrata.model.User;
 /**
  * Created by SeptimusX75 (msilva28.dev@gmail.com) on 2/26/2016.
  */
-public class PracticeViewModel extends BaseViewModel {
+public class PracticeViewModel extends BindingViewModel {
 
     private User mUser;
 

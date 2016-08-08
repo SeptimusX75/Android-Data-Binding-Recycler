@@ -1,10 +1,16 @@
 package meta.simplifi.substrata.fragment;
 
 import android.databinding.ObservableArrayList;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
+import meta.simplifi.core.adapter.ArrayBindingRecyclerAdapter;
 import meta.simplifi.core.adapter.BindingRecyclerAdapter;
 import meta.simplifi.core.fragment.BindingRecyclerFragment;
 import meta.simplifi.substrata.R;
@@ -15,10 +21,13 @@ import meta.simplifi.substrata.viewmodel.PracticeViewModel;
  * Created by SeptimusX75 (msilva28.dev@gmail.com) on 2/26/2016.
  */
 public class PracticeFragment
-        extends BindingRecyclerFragment<BindingRecyclerAdapter<PracticeViewModel>> {
+        extends BindingRecyclerFragment<ArrayBindingRecyclerAdapter<PracticeViewModel>> {
+
+    private RecyclerView mRecyclerView;
+
     @NonNull
     @Override
-    protected BindingRecyclerAdapter<PracticeViewModel> createBindingAdapter() {
+    protected ArrayBindingRecyclerAdapter<PracticeViewModel> createBindingAdapter() {
         ObservableArrayList<PracticeViewModel> list =
                 new ObservableArrayList<>();
         for (int i = 0; i < 50; i++) {
@@ -27,7 +36,19 @@ public class PracticeFragment
             list.add(new PracticeViewModel(user));
         }
 
-        return new BindingRecyclerAdapter<>(list);
+        return new ArrayBindingRecyclerAdapter<>(list);
+    }
+
+    @Override
+    protected RecyclerView getRecyclerView() {
+        return mRecyclerView;
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        mRecyclerView = ((RecyclerView) inflater.inflate(R.layout.layout_recycler_view, container));
+        return mRecyclerView;
     }
 
     @Override

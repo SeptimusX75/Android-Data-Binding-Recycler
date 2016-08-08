@@ -1,17 +1,13 @@
 package meta.simplifi.core.fragment;
 
 import android.os.Bundle;
-import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 
-import meta.simplifi.core.R;
 import meta.simplifi.core.adapter.BindingRecyclerAdapter;
 
 /**
@@ -21,13 +17,12 @@ import meta.simplifi.core.adapter.BindingRecyclerAdapter;
  * item click events within the RecyclerView for your convenience. To handle these events,
  * override OnItemClicked.
  * <p/>
- * Created by SeptimusX75 (msilva28.dev@gmail.com) on 2/26/2016.
+ * Created by M. Silva on 2/26/2016.
  */
 public abstract class BindingRecyclerFragment<T extends BindingRecyclerAdapter>
         extends Fragment
         implements BindingRecyclerAdapter.OnItemClickListener {
 
-    private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private T mAdapter;
 
@@ -40,22 +35,9 @@ public abstract class BindingRecyclerFragment<T extends BindingRecyclerAdapter>
     protected abstract T createBindingAdapter();
 
     /**
-     * Gets the layout containing the RecyclerView.
-     *
-     * @return The layout resource ID for the layout containing the RecyclerView.
-     * Default implementation returns only a RecyclerView.
+     * @return The RecyclerView contained in this Fragment.
      */
-    @LayoutRes
-    protected int getLayoutId() {
-        return R.layout.layout_recycler_view;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        mRecyclerView = (RecyclerView) inflater.inflate(getLayoutId(), container, false);
-        return mRecyclerView;
-    }
+    protected abstract RecyclerView getRecyclerView();
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -64,9 +46,10 @@ public abstract class BindingRecyclerFragment<T extends BindingRecyclerAdapter>
         mAdapter = createBindingAdapter();
         if (!mAdapter.hasOnItemClickListener()) mAdapter.setOnItemClickListener(this);
 
-        mLayoutManager = onSetLayoutManager(mRecyclerView);
+        mLayoutManager = onSetLayoutManager();
+        getRecyclerView().setLayoutManager(mLayoutManager);
 
-        mRecyclerView.setAdapter(mAdapter);
+        getRecyclerView().setAdapter(mAdapter);
     }
 
     /**
@@ -75,13 +58,6 @@ public abstract class BindingRecyclerFragment<T extends BindingRecyclerAdapter>
     @NonNull
     protected T getAdapter() {
         return mAdapter;
-    }
-
-    /**
-     * @return The RecyclerView contained in this Fragment.
-     */
-    protected RecyclerView getRecyclerView() {
-        return mRecyclerView;
     }
 
     /**
@@ -96,13 +72,10 @@ public abstract class BindingRecyclerFragment<T extends BindingRecyclerAdapter>
      * Allows setting of a custom layout manager.
      * Default implementation uses a LinearLayoutManager.
      *
-     * @param recyclerView The RecyclerView to set a layout manager on.
      * @return The LayoutManager set on the RecyclerView.
      */
     @NonNull
-    protected RecyclerView.LayoutManager onSetLayoutManager(RecyclerView recyclerView) {
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(layoutManager);
-        return layoutManager;
+    protected RecyclerView.LayoutManager onSetLayoutManager() {
+        return new LinearLayoutManager(getContext());
     }
 }

@@ -12,7 +12,7 @@ import android.support.annotation.LayoutRes;
  * <p/>
  * Created by SeptimusX75 (msilva28.dev@gmail.com) on 2/25/2016.
  */
-public abstract class BaseViewModel extends BaseObservable {
+public abstract class BindingViewModel extends BaseObservable {
 
     /**
      * Gets the layout ID associated with this view-model.
